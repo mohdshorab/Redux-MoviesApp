@@ -1,11 +1,9 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import LikedMovies from "../../screens/LikedMovies";
+import WatchLater from "../../screens/WatchLater";
 import FavouriteMovies from "../../screens/FavouriteMovies";
 import Dashboard from "../../screens/Dashboard";
-import MyTabs from "../bottomTabNav/BottomTabNav";
 import { Image, StyleSheet } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 
 const Drawer = createDrawerNavigator();
@@ -24,11 +22,11 @@ const DrawerNav = () => {
                 }}
             />
             <Drawer.Screen
-                name="Liked Movies"
-                component={LikedMovies}
+                name="Saved For Later"
+                component={WatchLater}
                 options={{
                     drawerIcon: () => (
-                        <Image style={styles.imgIcon} source={{ uri: 'https://img.icons8.com/color/344/facebook-like--v1.png' }}
+                        <Image style={styles.imgIcon} source={{ uri: 'https://img.icons8.com/dusk/344/save--v1.png' }}
                         />
                     )
                 }}
@@ -43,6 +41,16 @@ const DrawerNav = () => {
                     )
                 }}
             />
+            {/* <Drawer.Screen
+                name="DetailsScreen"
+                component={DetailsScreen}
+                options={{
+                    drawerIcon: () => (
+                        <Image style={styles.imgIcon} source={{ uri: 'https://img.icons8.com/external-flat-icons-pause-08/344/external-favourite-winter-flat-icons-pause-08.png' }}
+                        />
+                    )
+                }}
+            /> */}
         </Drawer.Navigator>
     )
 }

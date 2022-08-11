@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import ImageCarousel from "../components/ImageCarousel";
 import MyTabs from "../navigation/bottomTabNav/BottomTabNav";
 

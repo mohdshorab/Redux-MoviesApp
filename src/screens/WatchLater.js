@@ -3,22 +3,20 @@ import { FlatList, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { connect } from "react-redux";
-import { removeFromFav } from "../redux/actions/actions";
+import { removeFromWatchLater } from "../redux/actions/actions";
 
-class FavouriteMovies extends React.Component {
-
+class WatchLater extends React.Component {
     render() {
-        const { favMovies } = this.props;
 
-        const removeFromFavourites = (movie) => {
-            this.props.dispatchRemoveFromFavMovies(movie);
+        const { watchLaterMovies } = this.props;
+
+        const removeFromWatchLater = (movie) => {
+            this.props.dispatchRemoveFromWatchLater(movie);
         }
-
         return (
             <View style={styles.container}>
-                {/* {console.log(favMovies)} */}
                 <ScrollView>
-                    {favMovies.map((movie, index) => (
+                    {watchLaterMovies.map((movie, index) => (
                         <TouchableOpacity style={styles.card} >
                             <Image style={styles.image} source={{ uri: movie.imageUrl }} />
                             <View style={styles.cardContent}>
@@ -41,7 +39,7 @@ class FavouriteMovies extends React.Component {
                                     style={styles.followButton}
                                     onPress={() => {
                                         // console.log(index)
-                                        removeFromFavourites(movie)
+                                        removeFromWatchLater(movie)
                                     }}
                                 >
                                     <Text style={styles.followButtonText}>Remove From Favourite</Text>
@@ -128,12 +126,12 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = {
-    dispatchRemoveFromFavMovies: movie => removeFromFav(movie),
+    dispatchRemoveFromWatchLater: movie => removeFromWatchLater(movie),
 }
 
 
 const mapStateToProps = (state) => ({
-    favMovies: state.movieReducer.favMovies,
+    watchLaterMovies: state.movieReducer.watchLaterMovies,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FavouriteMovies);
+export default connect(mapStateToProps, mapDispatchToProps)(WatchLater);

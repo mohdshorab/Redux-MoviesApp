@@ -17,13 +17,13 @@ const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
 const ImageCarousel = () => {
-    const [imgActive, setImgActive] = useState(0);
+    const [carouselActiveImage, setCarouselActiveImage] = useState(0);
 
-    const onchange = (nativeEvent) => {
-        if (nativeEvent) {
-            const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
-            if (slide != imgActive) {
-                setImgActive(slide);
+    const onchange = (event) => {
+        if (event) {
+            const slide = Math.ceil(event.contentOffset.x / event.layoutMeasurement.width);
+            if (slide != carouselActiveImage) {
+                setCarouselActiveImage(slide);
             }
         }
     }
@@ -32,29 +32,27 @@ const ImageCarousel = () => {
         <SafeAreaView style={styles.container}>
             <View style={styles.imageView}>
                 <ScrollView
-                    onScroll={({ nativeEvent }) => onchange(nativeEvent)}
+                    onScroll={({ nativeEvent: event }) => onchange(event)}
                     showsHorizontalScrollIndicator={false}
                     pagingEnabled
                     horizontal
                     style={styles.imageView}
                 >{
-                        IMAGES.map((e, index) => <Image key={e} resizeMode='stretch' style={styles.imageView} source={{ uri: e }} />)
+                        IMAGES.map((key, index) => <Image key={key} resizeMode='stretch' style={styles.imageView} source={{ uri: key }} />)
                     }
 
                 </ScrollView>
                 <View style={styles.imageCarouselDOts} >
                     {
-                        IMAGES.map((e, index) =>
+                        IMAGES.map((key, index) =>
                             <Text
-                                key={e}
-                                style={imgActive == index ? styles.imageCarouselActiveDot : styles.imageCarouselInactiveDot}
+                                key={key}
+                                style={carouselActiveImage == index ? styles.imageCarouselActiveDot : styles.imageCarouselInactiveDot}
                             >
                                 ●
                             </Text>
                         )
                     }
-
-
                 </View>
             </View>
 
