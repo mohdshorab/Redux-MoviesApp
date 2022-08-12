@@ -4,6 +4,7 @@ import WatchLater from "../../screens/WatchLater";
 import FavouriteMovies from "../../screens/FavouriteMovies";
 import Dashboard from "../../screens/Dashboard";
 import { Image, StyleSheet } from "react-native";
+import LikedMovies from "../../screens/LikedMovies";
 
 
 const Drawer = createDrawerNavigator();
@@ -41,16 +42,16 @@ const DrawerNav = () => {
                     )
                 }}
             />
-            {/* <Drawer.Screen
-                name="DetailsScreen"
-                component={DetailsScreen}
+            <Drawer.Screen
+                name="LikedMovies"
+                component={LikedMovies}
                 options={{
                     drawerIcon: () => (
-                        <Image style={styles.imgIcon} source={{ uri: 'https://img.icons8.com/external-flat-icons-pause-08/344/external-favourite-winter-flat-icons-pause-08.png' }}
+                        <Image style={styles.imgIcon} source={{ uri: 'https://img.icons8.com/color/344/facebook-like--v1.png' }}
                         />
                     )
                 }}
-            /> */}
+            />
         </Drawer.Navigator>
     )
 }

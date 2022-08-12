@@ -1,10 +1,35 @@
 import React from 'react';
 import { View, SafeAreaView, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import COLORS from '../../consts/colors';
+import { connect } from 'react-redux';
+import { addTofav, addToLikedMovies, addToWatchLater, removeFromFav, removeFromLikedMovies, removeFromWatchLater } from '../../redux/actions/actions';
 
 
 class DetailsScreen extends React.Component {
     render() {
+        const addToFavourites = (bollywoodMovie) => {
+            this.props.dispatchAddToFav(bollywoodMovie);
+        }
+
+        const removeFromFavourites = (bollywoodMovie) => {
+            this.props.dispatchRemoveFromFav(bollywoodMovie);
+        }
+
+        const addToWatchLater = (movie) => {
+            this.props.dispatchWatchLater(movie);
+        }
+
+        const removeFromWatchLater = (movie) => {
+            this.props.dispatchRemoveFromSaved(movie)
+        }
+
+        const addToLikedMovies = (movie) => {
+            this.props.dispatchAddToLiked(movie);
+        }
+
+        const removeFromLikedMovies = (movie) => {
+            this.props.dispatchRemoveFromLikedMovies(movie)
+        }
         return (
             <SafeAreaView
                 style={{
@@ -48,7 +73,7 @@ class DetailsScreen extends React.Component {
                             alignItems: 'center',
                         }}>
                         <Text style={{ fontSize: 22, fontWeight: 'bold' }}>Genre : {this.props.route.params.genre}</Text>
-                        <View style={style.priceTag}>
+                        <View style={style.imdbRating}>
                             <Text
                                 style={{
                                     marginLeft: 15,
@@ -77,24 +102,68 @@ class DetailsScreen extends React.Component {
                                 flexDirection: 'row',
                                 justifyContent: 'space-evenly',
                             }}>
-                            {/* <View style={style.buyBtn}>
-                                <Text
-                                    style={{ color: COLORS.white, fontSize: 18, fontWeight: 'bold' }}>
-                                    Add to fav
-                                </Text>
-                            </View> */}
-                            <View style={style.buyBtn}>
-                                <Text
-                                    style={{ color: COLORS.white, fontSize: 18, fontWeight: 'bold' }}>
-                                    Like
-                                </Text>
-                            </View>
-                            <View style={style.buyBtn}>
-                                <Text
-                                    style={{ color: COLORS.white, fontSize: 18, fontWeight: 'bold' }}>
-                                    Watch Later
-                                </Text>
-                            </View>
+
+                            {/* Liked Movies */}
+                            {(!this.props.likedMovies.find(element => element.name == this.props.route.params.name)) ?
+                                <View style={style.bottomBtns}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            addToLikedMovies(this.props.route.params)
+                                        }}
+                                    >
+                                        <Text
+                                            style={{ color: COLORS.white, fontSize: 18, fontWeight: 'bold' }}>
+                                            Like
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                                :
+                                <View style={style.bottomBtns}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            removeFromLikedMovies(this.props.route.params)
+                                        }}
+                                    >
+                                        <Text
+                                            style={{ color: COLORS.white, fontSize: 18, fontWeight: 'bold' }}>
+                                            Remove like
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            }
+
+
+                            {/* saved Movies */}
+                            {(!this.props.watchLaterMovies.find(element => element.name == this.props.route.params.name)) ?
+                                <View style={style.bottomBtns}>
+                                    <TouchableOpacity
+                                        onPress={
+                                            () => {
+                                                addToWatchLater(this.props.route.params)
+                                            }
+                                        }
+                                    >
+                                        <Text
+                                            style={{ color: COLORS.white, fontSize: 18, fontWeight: 'bold' }}>
+                                            Watch Later
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View> :
+                                <View style={style.bottomBtns}>
+                                    <TouchableOpacity
+                                        onPress={
+                                            () => {
+                                                removeFromWatchLater(this.props.route.params)
+                                            }
+                                        }
+                                    >
+                                        <Text
+                                            style={{ color: COLORS.white, fontSize: 18, fontWeight: 'bold' }}>
+                                            Remove saved
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            }
                         </View>
                     </View>
                 </View>
@@ -104,12 +173,7 @@ class DetailsScreen extends React.Component {
 };
 
 const style = StyleSheet.create({
-    header: {
-        paddingHorizontal: 20,
-        marginTop: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
+
     imageContainer: {
         flex: 0.45,
         marginTop: 20,
@@ -149,7 +213,7 @@ const style = StyleSheet.create({
         height: 40,
     },
     borderBtnText: { fontWeight: 'bold', fontSize: 28 },
-    buyBtn: {
+    bottomBtns: {
         width: 120,
         height: 35,
         backgroundColor: COLORS.red,
@@ -157,7 +221,7 @@ const style = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 30,
     },
-    priceTag: {
+    imdbRating: {
         backgroundColor: COLORS.red,
         width: 80,
         height: 40,
@@ -168,5 +232,22 @@ const style = StyleSheet.create({
 });
 
 
+const mapDispatchToProps = {
+    dispatchAddToFav: bollywoodMovie => addTofav(bollywoodMovie),
+    dispatchWatchLater: movie => addToWatchLater(movie),
+    dispatchAddToLiked: movie => addToLikedMovies(movie),
+    dispatchRemoveFromLikedMovies: movie => removeFromLikedMovies(movie),
+    dispatchRemoveFromFav: bollywoodMovie => removeFromFav(bollywoodMovie),
+    dispatchRemoveFromSaved: bollywoodMovie => removeFromWatchLater(bollywoodMovie),
+}
 
-export default DetailsScreen;
+
+const mapStateToProps = state => ({
+    bollywood: state.movieReducer.bollywood,
+    favMovies: state.movieReducer.favMovies,
+    watchLaterMovies: state.movieReducer.watchLaterMovies,
+    likedMovies: state.movieReducer.likedMovies,
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailsScreen);

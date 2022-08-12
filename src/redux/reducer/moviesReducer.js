@@ -1,4 +1,4 @@
-import { LOAD_BOLLYWOOD_MOVIES, REMOVE_FROM_FAV, REMOVE_FROM_WATCH_LATER, WATCH_LATER } from "../actions/actions";
+import { ADD_TO_LIKED_MOVIES, LOAD_BOLLYWOOD_MOVIES, REMOVE_FROM_FAV, REMOVE_FROM_LIKED_MOVIES, REMOVE_FROM_WATCH_LATER, WATCH_LATER } from "../actions/actions";
 import { ADD_TO_FAV } from "../actions/actions";
 import { LOAD_HOLLYWOOD_MOVIES } from "../actions/actions";
 
@@ -253,7 +253,8 @@ const initialState = {
         }
     ],
     favMovies: [],
-    watchLaterMovies: []
+    watchLaterMovies: [],
+    likedMovies: []
 };
 
 export const movieReducer = (state = initialState, action) => {
@@ -311,6 +312,27 @@ export const movieReducer = (state = initialState, action) => {
             return {
                 ...state,
                 watchLaterMovies: watchLaterMovieData
+            }
+
+        // adding  movies to LikedMovies[]
+        case ADD_TO_LIKED_MOVIES:
+            const isMovieExistInLikedMovies = state.likedMovies.find((movie) => movie._id === action.payload._id);
+            if (!isMovieExistInLikedMovies) {
+                return {
+                    ...state,
+                    likedMovies: [...state.likedMovies, action.payload]
+                }
+            }
+            else {
+                return { ...state, likedMovies: [...state.likedMovies] }
+            }
+
+        case REMOVE_FROM_LIKED_MOVIES:
+            const likedMovieData = state.likedMovies.filter((movie) => movie._id !== action.payload._id);
+            // console.log('Data is ', data);
+            return {
+                ...state,
+                likedMovies: likedMovieData
             }
 
         default: return state

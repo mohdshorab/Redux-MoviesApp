@@ -3,21 +3,22 @@ import { FlatList, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { connect } from "react-redux";
-import { removeFromWatchLater } from "../redux/actions/actions";
+import { removeFromLikedMovies, removeFromWatchLater } from "../redux/actions/actions";
 
-class WatchLater extends React.Component {
+class LikedMovies extends React.Component {
     render() {
 
-        const { watchLaterMovies } = this.props;
+        const { likedMovies } = this.props;
 
-        const removeFromWatchLater = (movie) => {
-            this.props.dispatchRemoveFromWatchLater(movie);
+        const removeFromLikedMovies = (movie) => {
+            this.props.dispatchRemoveFromLikedMovies(movie);
         }
         return (
+
             <View style={styles.container}>
-                {(watchLaterMovies.length > 0) ?
+                {(likedMovies.length > 0) ?
                     <ScrollView>
-                        {watchLaterMovies.map((movie, index) => (
+                        {likedMovies.map((movie, index) => (
                             <TouchableOpacity style={styles.card} >
                                 <Image style={styles.image} source={{ uri: movie.imageUrl }} />
                                 <View style={styles.cardContent}>
@@ -25,32 +26,33 @@ class WatchLater extends React.Component {
                                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View>
                                             <Text>Genre</Text>
-                                            <Text style={styles.movieSubDetails}>{movie.genre}</Text>
+                                            <Text style={styles.movieCardSubDetails}>{movie.genre}</Text>
                                         </View>
                                         <View>
                                             <Text>Year</Text>
-                                            <Text style={styles.movieSubDetails}>{movie.releaseYear}</Text>
+                                            <Text style={styles.movieCardSubDetails}>{movie.releaseYear}</Text>
                                         </View>
                                         <View>
                                             <Text>Runtime</Text>
-                                            <Text style={styles.movieSubDetails}>{movie.runtime}</Text>
+                                            <Text style={styles.movieCardSubDetails}>{movie.runtime}</Text>
                                         </View>
                                     </View>
                                     <TouchableOpacity
-                                        style={styles.removeBtn}
+                                        style={styles.removeFromLikedMovieBtn}
                                         onPress={() => {
                                             // console.log(index)
-                                            removeFromWatchLater(movie)
+                                            removeFromLikedMovies(movie)
                                         }}
                                     >
-                                        <Text style={styles.removeBtnText}>Remove From Saved Movies</Text>
+                                        <Text style={styles.removeFromLikedMovieBtnText}>Remove From Liked Movies</Text>
                                     </TouchableOpacity>
                                 </View>
                             </TouchableOpacity>
                         ))}
                     </ScrollView>
                     :
-                    <Text style={styles.noSavedMovie} >If want to save movie for later, hit the "save" button.</Text>
+                    <Text style={styles.noLikedMovie} >If you enjoyed the movie, hit the "like" button.</Text>
+
                 }
             </View>
         )
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         backgroundColor: "#ebf0f7"
     },
-    noSavedMovie: {
+    noLikedMovie: {
         alignSelf: 'center',
         fontWeight: 'bold'
     },
@@ -70,13 +72,13 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginTop: 2
     },
-    movieSubDetails: {
+    movieCardSubDetails: {
         fontSize: 14,
         flex: 1,
         // alignSelf: 'center',
         color: "#6666ff"
     },
-    removeBtn: {
+    removeFromLikedMovieBtn: {
         marginTop: 10,
         height: 28,
         width: 180,
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "red",
     },
-    removeBtnText: {
+    removeFromLikedMovieBtnText: {
         color: "red",
         fontSize: 14,
         fontWeight: 'bold'
@@ -129,12 +131,12 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = {
-    dispatchRemoveFromWatchLater: movie => removeFromWatchLater(movie),
+    dispatchRemoveFromLikedMovies: movie => removeFromLikedMovies(movie),
 }
 
 
 const mapStateToProps = (state) => ({
-    watchLaterMovies: state.movieReducer.watchLaterMovies,
+    likedMovies: state.movieReducer.likedMovies,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(WatchLater);
+export default connect(mapStateToProps, mapDispatchToProps)(LikedMovies);

@@ -16,40 +16,44 @@ class FavouriteMovies extends React.Component {
 
         return (
             <View style={styles.container}>
-                {/* {console.log(favMovies)} */}
-                <ScrollView>
-                    {favMovies.map((movie, index) => (
-                        <TouchableOpacity style={styles.card} >
-                            <Image style={styles.image} source={{ uri: movie.imageUrl }} />
-                            <View style={styles.cardContent}>
-                                <Text style={styles.name}>{movie.name}</Text>
-                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <View>
-                                        <Text>Genre</Text>
-                                        <Text style={styles.count}>{movie.genre}</Text>
+                {(favMovies.length > 0) ?
+                    <ScrollView>
+                        {favMovies.map((movie, index) => (
+                            <TouchableOpacity style={styles.card} >
+                                <Image style={styles.image} source={{ uri: movie.imageUrl }} />
+                                <View style={styles.cardContent}>
+                                    <Text style={styles.name}>{movie.name}</Text>
+                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View>
+                                            <Text>Genre</Text>
+                                            <Text style={styles.count}>{movie.genre}</Text>
+                                        </View>
+                                        <View>
+                                            <Text>Year</Text>
+                                            <Text style={styles.count}>{movie.releaseYear}</Text>
+                                        </View>
+                                        <View>
+                                            <Text>Runtime</Text>
+                                            <Text style={styles.count}>{movie.runtime}</Text>
+                                        </View>
                                     </View>
-                                    <View>
-                                        <Text>Year</Text>
-                                        <Text style={styles.count}>{movie.releaseYear}</Text>
-                                    </View>
-                                    <View>
-                                        <Text>Runtime</Text>
-                                        <Text style={styles.count}>{movie.runtime}</Text>
-                                    </View>
+                                    <TouchableOpacity
+                                        style={styles.removeBtn}
+                                        onPress={() => {
+                                            // console.log(index)
+                                            removeFromFavourites(movie)
+                                        }}
+                                    >
+                                        <Text style={styles.removeBtnText}>Remove From Favourite</Text>
+                                    </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity
-                                    style={styles.followButton}
-                                    onPress={() => {
-                                        // console.log(index)
-                                        removeFromFavourites(movie)
-                                    }}
-                                >
-                                    <Text style={styles.followButtonText}>Remove From Favourite</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
+                            </TouchableOpacity>
+                        ))}
+                    </ScrollView>
+                    :
+                    <Text style={styles.noFavMovie} >If you love the movie, hit the "Heart" icon.</Text>
+
+                }
             </View>
         )
     }
@@ -64,13 +68,17 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginTop: 2
     },
+    noFavMovie: {
+        alignSelf: 'center',
+        fontWeight: 'bold'
+    },
     count: {
         fontSize: 14,
         flex: 1,
         // alignSelf: 'center',
         color: "#6666ff"
     },
-    followButton: {
+    removeBtn: {
         marginTop: 10,
         height: 28,
         width: 180,
@@ -83,15 +91,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "red",
     },
-    followButtonText: {
+    removeBtnText: {
         color: "red",
         fontSize: 14,
         fontWeight: 'bold'
-    },
-
-    tiles: {
-        padding: 20,
-        flexDirection: 'row',
     },
     image: {
         height: 110,
